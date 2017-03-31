@@ -881,18 +881,14 @@ Macro definitions
 #define _5DBF_TAU_TDR00_VALUE                   (0x5DBFU)
 /* Clock divisor for TAU0 channel 0 */
 #define _0001_TAU0_CHANNEL0_DIVISOR             (0x0001U)
-/* 16-bit timer data register 01 (TDR01) */
-#define _BB7F_TAU_TDR01_VALUE                   (0xBB7FU)
-/* Clock divisor for TAU0 channel 1 */
-#define _0001_TAU0_CHANNEL1_DIVISOR             (0x0001U)
 /* TMRD register A1 (TRDGRA1) */
-#define _095F_TMRD_TRDGRA1_VALUE                (0x095FU)
+#define _12BF_TMRD_TRDGRA1_VALUE                (0x12BFU)
 /* TMRD register B1 (TRDGRB1) */
-#define _04AF_TMRD_TRDGRB1_VALUE                (0x04AFU)
+#define _095F_TMRD_TRDGRB1_VALUE                (0x095FU)
 /* TMRD register C1 (TRDGRC1) */
-#define _04AF_TMRD_TRDGRC1_VALUE                (0x04AFU)
+#define _095F_TMRD_TRDGRC1_VALUE                (0x095FU)
 /* TMRD register D1 (TRDGRD1) */
-#define _04AF_TMRD_TRDGRD1_VALUE                (0x04AFU)
+#define _095F_TMRD_TRDGRD1_VALUE                (0x095FU)
 
 /***********************************************************************************************************************
 Typedef definitions
@@ -912,8 +908,6 @@ Global functions
 void R_TAU0_Create(void);
 void R_TAU0_Channel0_Start(void);
 void R_TAU0_Channel0_Stop(void);
-void R_TAU0_Channel1_Start(void);
-void R_TAU0_Channel1_Stop(void);
 void R_TMR_RD1_Create(void);
 void R_TMR_RD1_Start(void);
 void R_TMR_RD1_Stop(void);

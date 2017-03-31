@@ -87,14 +87,6 @@ void R_TAU0_Create(void)
     TDR00 = _5DBF_TAU_TDR00_VALUE;
     TO0 &= ~_0001_TAU_CH0_OUTPUT_VALUE_1;
     TOE0 &= ~_0001_TAU_CH0_OUTPUT_ENABLE;
-    /* Channel 1 used as interval timer */
-    TMR01 = _0000_TAU_CLOCK_SELECT_CKM0 | _0000_TAU_CLOCK_MODE_CKS | _0000_TAU_16BITS_MODE |
-            _0000_TAU_TRIGGER_SOFTWARE | _0000_TAU_MODE_INTERVAL_TIMER | _0000_TAU_START_INT_UNUSED;
-    TDR01 = _BB7F_TAU_TDR01_VALUE;
-    TOM0 &= ~_0002_TAU_CH1_OUTPUT_COMBIN;
-    TOL0 &= ~_0002_TAU_CH1_OUTPUT_LEVEL_L;
-    TO0 &= ~_0002_TAU_CH1_OUTPUT_VALUE_1;
-    TOE0 &= ~_0002_TAU_CH1_OUTPUT_ENABLE;
 }
 
 /***********************************************************************************************************************
@@ -125,28 +117,6 @@ void R_TAU0_Channel0_Stop(void)
 }
 
 /***********************************************************************************************************************
-* Function Name: R_TAU0_Channel1_Start
-* Description  : This function starts TAU0 channel 1 counter.
-* Arguments    : None
-* Return Value : None
-***********************************************************************************************************************/
-void R_TAU0_Channel1_Start(void)
-{
-    TS0 |= _0002_TAU_CH1_START_TRG_ON;
-}
-
-/***********************************************************************************************************************
-* Function Name: R_TAU0_Channel1_Stop
-* Description  : This function stops TAU0 channel 1 counter.
-* Arguments    : None
-* Return Value : None
-***********************************************************************************************************************/
-void R_TAU0_Channel1_Stop(void)
-{
-    TT0 |= _0002_TAU_CH1_STOP_TRG_ON;
-}
-
-/***********************************************************************************************************************
 * Function Name: R_TMR_RD1_Create
 * Description  : This function initializes the TMRD1 module.
 * Arguments    : None
@@ -170,10 +140,10 @@ void R_TMR_RD1_Create(void)
     TRDCR1 |= _00_TMRD_INETNAL_CLOCK_F1_FIH | _20_TMRD_COUNTER_CLEAR_TRDGRA;
     TRDIER1 = _00_TMRD_IMIA_DISABLE | _00_TMRD_IMIB_DISABLE | _00_TMRD_IMIC_DISABLE | _00_TMRD_IMID_DISABLE;
     TRDPOCR1 = _00_TMRD_TRDIOB_OUTPUT_ACTIVE_L | _00_TMRD_TRDIOC_OUTPUT_ACTIVE_L | _00_TMRD_TRDIOD_OUTPUT_ACTIVE_L;
-    TRDGRA1 = _095F_TMRD_TRDGRA1_VALUE;
-    TRDGRB1 = _04AF_TMRD_TRDGRB1_VALUE;
-    TRDGRC1 = _04AF_TMRD_TRDGRC1_VALUE;
-    TRDGRD1 = _04AF_TMRD_TRDGRD1_VALUE;
+    TRDGRA1 = _12BF_TMRD_TRDGRA1_VALUE;
+    TRDGRB1 = _095F_TMRD_TRDGRB1_VALUE;
+    TRDGRC1 = _095F_TMRD_TRDGRC1_VALUE;
+    TRDGRD1 = _095F_TMRD_TRDGRD1_VALUE;
     /* Set TRDIOB1 pin */
     P1 &= 0xFBU;
     PM1 &= 0xFBU;

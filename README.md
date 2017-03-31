@@ -1,2 +1,7 @@
 # MyBLDC_18V
 Just for Study
+
+
+R5F104BA
+
+R7F0C009B

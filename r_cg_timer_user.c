@@ -60,10 +60,10 @@ __interrupt static void r_tau0_channel0_interrupt(void)
     /* Start user code. Do not edit comment generated here */
 	g_sysTick ++;
 	if(g_sysTick & 0x01)
-		g_elapse2Ms = true;
+		g_elapse2Ms = false;
     if(0 == g_sysTick%500)
     {
-		Led_Trig();
+		//Led_Trig();
 	}
     /* End user code. Do not edit comment generated here */
 }

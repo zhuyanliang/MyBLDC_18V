@@ -173,5 +173,10 @@ void R_ADC_Set_OperationOff(void);
 void R_ADC_Get_Result(uint16_t * const buffer);
 
 /* Start user code for function. Do not edit comment generated here */
+uint16_t 	ADC_Convert_Original(uint8_t channel);
+float 		ADC_Convert_Volt(uint8_t channel);
+uint16_t 	ADC_Average_Original(uint8_t num,uint8_t channel);
+
+
 /* End user code. Do not edit comment generated here */
 #endif

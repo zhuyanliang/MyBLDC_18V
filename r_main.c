@@ -61,15 +61,36 @@ void R_MAIN_UserInit(void);
 ***********************************************************************************************************************/
 void main(void)
 {
+	static uint8_t tskList = 0;
+	
     R_MAIN_UserInit();
     /* Start user code. Do not edit comment generated here */
 	
-	// TRDOER1 |= 0x80;
+	Set_Led(3,4,20);
 	
     for(;;)
     {
 		g_elapse2Ms = true;
-		
+		g_justForTest++;
+
+		switch(tskList++)
+		{
+		case 0:
+			Task_Voltage_Check();
+			break;
+		case 1:
+			//Task_LED();
+			Led_Trig();
+			break;
+		case 2:
+			Task_Button();
+			break;
+		case 3:
+			break;
+		default:
+			tskList = 0;
+			break;
+		}
         while(g_elapse2Ms);
     }
     /* End user code. Do not edit comment generated here */
@@ -86,9 +107,8 @@ void R_MAIN_UserInit(void)
     /* Start user code. Do not edit comment generated here */
 	hdwinit();
 
-	R_TAU0_Channel0_Start();
-	R_TMR_RD1_Start();
-	R_TAU0_Channel1_Start();
+	R_TAU0_Channel0_Start();	/* system tick */
+	R_TMR_RD1_Start();		 	/* PWM generate*/
 	
     EI();
     /* End user code. Do not edit comment generated here */

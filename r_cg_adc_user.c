@@ -38,6 +38,7 @@ Includes
 #include "r_cg_macrodriver.h"
 #include "r_cg_adc.h"
 /* Start user code for include. Do not edit comment generated here */
+#include "u_include.h"
 /* End user code. Do not edit comment generated here */
 #include "r_cg_userdefine.h"
 
@@ -48,4 +49,56 @@ Global variables and functions
 /* End user code. Do not edit comment generated here */
 
 /* Start user code for adding. Do not edit comment generated here */
+
+/*
+ * return ADC original value
+ */
+uint16_t ADC_Convert_Original(uint8_t channel)
+{
+	uint16_t ret = 0;
+	
+	ADS = channel;
+	R_ADC_Set_OperationOn();
+	Delay_1Us();
+	R_ADC_Start();
+	while(!ADIF);	// 26us
+	ADIF = 0;
+	ret = (uint16_t)(ADCR >> 6U);
+	R_ADC_Stop();
+	R_ADC_Set_OperationOff();
+
+	return ret;
+}
+
+/* 
+ * return voltage value
+ *
+ */
+float ADC_Convert_Volt(uint8_t channel)
+{
+	uint16_t orival = ADC_Convert_Original(channel);
+	
+	float ret = (float)orival/1024U*5.0;
+
+	return ret;
+}
+
+/*
+ * return num value average
+ * Tips:num < 64
+ */
+uint16_t ADC_Average_Original(uint8_t num,uint8_t channel)
+{
+	uint8_t i;
+	uint16_t sum = 0;
+	for(i=0;i<num;i++)
+	{
+		sum += ADC_Convert_Original(channel);
+		NOP();NOP();NOP();
+	}
+
+	return (uint16_t)sum/num;
+}
+
+
 /* End user code. Do not edit comment generated here */
