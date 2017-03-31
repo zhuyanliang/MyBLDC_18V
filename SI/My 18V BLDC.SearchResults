@@ -1,0 +1,6 @@
+---- g_wait2Ms Matches (5 in 4 files) ----
+R_cg_timer_user.c:		g_wait2Ms = false;
+R_main.c:		g_wait2Ms = true;
+R_main.c:        while(g_wait2Ms);
+U_gvar.c:bool 	 g_wait2Ms;
+U_gvar.h:extern bool 		g_wait2Ms;
