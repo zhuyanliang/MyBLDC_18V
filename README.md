@@ -2,6 +2,6 @@
 Just for Study
 
 
-R5F104BA
+用于Code Generator的IC型号：R5F104BA
 
-R7F0C009B
+本系统的IC型号:R7F0C009B

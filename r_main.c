@@ -23,7 +23,7 @@
 * Device(s)    : R5F104BA
 * Tool-Chain   : CA78K0R
 * Description  : This file implements main function.
-* Creation Date: 2017/3/31
+* Creation Date: 2017/4/1
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -41,6 +41,7 @@ Includes
 #include "r_cg_intc.h"
 #include "r_cg_adc.h"
 #include "r_cg_timer.h"
+#include "r_cg_wdt.h"
 /* Start user code for include. Do not edit comment generated here */
 #include "u_include.h"
 /* End user code. Do not edit comment generated here */
@@ -61,8 +62,6 @@ void R_MAIN_UserInit(void);
 ***********************************************************************************************************************/
 void main(void)
 {
-	static uint8_t tskList = 0;
-	
     R_MAIN_UserInit();
     /* Start user code. Do not edit comment generated here */
 	
@@ -70,28 +69,40 @@ void main(void)
 	
     for(;;)
     {
-		g_elapse2Ms = true;
 		g_justForTest++;
 
-		switch(tskList++)
+		// loop execution always
+		Task_Current_Check();
+		Task_Motor();
+
+		//execution cycle is 2Ms
+		if(g_elapse2Ms)
 		{
-		case 0:
-			Task_Voltage_Check();
-			break;
-		case 1:
-			//Task_LED();
-			Led_Trig();
-			break;
-		case 2:
-			Task_Button();
-			break;
-		case 3:
-			break;
-		default:
-			tskList = 0;
-			break;
+			static uint8_t tskList = 0;
+			g_elapse2Ms = false;
+
+			R_WDT_Restart();
+			
+			switch(tskList++)
+			{
+			case 0:
+				Task_Voltage_Check();
+				break;
+			case 1:
+				Task_LED();
+				//Led_Trig();
+				break;
+			case 2:
+				Task_Btn_Scan();
+				break;
+			case 3:
+				Task_Temperature_Check();
+				break;
+			default:
+				tskList = 0;
+				break;
+			}
 		}
-        while(g_elapse2Ms);
     }
     /* End user code. Do not edit comment generated here */
 }

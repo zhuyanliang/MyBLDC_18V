@@ -11,11 +11,15 @@ typedef enum
 
 typedef struct
 {
-	unsigned vlow	:1; 	/* voltage low */ 
-	unsigned cov	:1;		/* overcurrent */
-	unsigned com 	:1;
-	unsigned mos_ot :1;
-	unsigned		:4;
+	unsigned lowVolt	:1; 	/* voltage low */ 
+	unsigned ovCur		:1;		/* overcurrent */
+	unsigned comm 		:1;
+	unsigned mos_ovTemp :1;
+	unsigned ovload		:1;		/* overload*/
+	unsigned curshort	:1;
+	unsigned hallerr	:1;
+	unsigned 			:1;
+	
 }S_SYS_PROTECT;
 
 typedef enum
@@ -29,12 +33,12 @@ typedef enum
 
 typedef enum
 {
+	MOTOR_NULL = 0,
 	MOTOR_STOP 		= 1,
 	MOTOR_STARTUP 	= 2,
-	MOTOR_FWDRUN	= 3,
-	MOTOR_REVRUN	= 4,
-	MOTOR_BRAKE		= 5,
-	MOTOR_BLOCK		= 6,
+	MOTOR_RUNNING	= 3,
+	MOTOR_BRAKE		= 4,
+	MOTOR_BLOCK		= 5,
 }E_MOTOR_STATUS;
 
 typedef struct
@@ -46,10 +50,16 @@ typedef struct
 
 extern uint32_t 		g_sysTick;
 extern bool 			g_elapse2Ms;
+
 extern S_SYS_PROTECT	g_sysProtect;
 extern S_LED_SET		g_ledSet;
-extern E_MOTOR_STATUS	g_MotorState;
+extern E_MOTOR_STATUS	g_motorState;
+extern uint8_t			g_hallState;
+extern bool 			g_btnPress;
+extern uint16_t 		g_motorCurrent;
+extern bool 			g_motorDirection;
 
-extern uint32_t		g_justForTest;
+
+extern uint32_t			g_justForTest;
 
 #endif

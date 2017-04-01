@@ -6,7 +6,7 @@ void Task_Current_Check(void);
 void Task_Temperature_Check(void);
 void Task_Motor(void);
 void Task_LED(void);
-void Task_Button(void);
+void Task_Btn_Scan(void);
 void Task_Delay(void);
 void Task_Process_ProtectInfo(void);
 

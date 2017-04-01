@@ -23,7 +23,7 @@
 * Device(s)    : R5F104BA
 * Tool-Chain   : CA78K0R
 * Description  : This file implements system initializing function.
-* Creation Date: 2017/3/31
+* Creation Date: 2017/4/1
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -41,6 +41,7 @@ Includes
 #include "r_cg_intc.h"
 #include "r_cg_adc.h"
 #include "r_cg_timer.h"
+#include "r_cg_wdt.h"
 /* Start user code for include. Do not edit comment generated here */
 /* End user code. Do not edit comment generated here */
 #include "r_cg_userdefine.h"
@@ -67,6 +68,7 @@ void R_Systeminit(void)
     R_PORT_Create();
     R_ADC_Create();
     R_TAU0_Create();
+    R_WDT_Create();
     R_INTC_Create();
     R_TMR_RD1_Create();
     IAWCTL = 0x00U;

@@ -15,11 +15,21 @@
 #define	Rbottom					47U
 #define Voltage_Normal			18U
 #define Voltage_Low_Value		14U
-#define Voltage_Low_Value_AD	(uint16_t)(Voltage_Low_Value*1.0*Rbottom/(Rtop+Rbottom)/VDD*ADC10BITS)
+#define Voltage_Low_Value_AD	(uint16_t)(Voltage_Low_Value*1.0F*Rbottom/(Rtop+Rbottom)/VDD*ADC10BITS)
 
+/*current check parameters*/
+#define R_curchk				0.002F
+#define Current_Short_Value		100U	/*uint: A*/
+#define Current_Overload_Value	45U	/*uint: A*/
+#define Current_Short_AD		(uint16_t)(Current_Short_Value*R_curchk/VDD*ADC10BITS)
+#define Current_Overload_AD		(uint16_t)(Current_Overload_Value*R_curchk/VDD*ADC10BITS)
 
-#define Current_Adc_Channel	1U
-#define Voltage_Adc_Channel	2U
-#define MOSTemp_Adc_Channel	3U
+/*mosfet temperature parameters*/
+#define R_div				10U
+#define Temp_Over_AD		100U  /*!!!!!!!!!!rember to modify*/
+
+#define Adc_Channel_Current	1U
+#define Adc_Channel_Voltage	2U
+#define Adc_Channel_MOSTemp	3U
 
 #endif

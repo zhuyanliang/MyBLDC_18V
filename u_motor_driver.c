@@ -129,6 +129,71 @@ void Motor_Brake(void)
 	P1 |= 0x70;                 //set all low bridge pin high to brake,  
 }
 
+void Manage_Motor_Phase(void)
+{
+	if(MOTOR_RUNNING == g_motorState)
+	{
+		static uint8_t lasthallState;
+		g_hallState = Get_Hall_State();
+		
+		if(g_hallState == lasthallState)
+			return;
+		Commutate_Phase(g_motorDirection,g_hallState);
+		lasthallState = g_hallState;
+	}
+	else if(MOTOR_BRAKE == g_motorState)
+	{
+		static uint8_t cnt;
+		if(cnt++ < 10)
+		{
+			Motor_Stop();
+		}
+		else if(cnt++ < 20)
+		{
+			Motor_Brake();
+		}
+		else
+		{
+			cnt = 0;
+		}
+	}
+	else if(MOTOR_STOP == g_motorState)
+	{
+		Motor_Stop();
+	}
+}
 
+void Hall_Interupt_Process(void)
+{
+	static uint8_t lastHallState;
+	static uint8_t expectHallState;
+	static uint8_t hallErrorCnt;
+	
+	if(!g_btnPress)
+		return;
+		
+	g_hallState = Get_Hall_State();
+	if(g_hallState != lastHallState)
+	{
+		Manage_Motor_Phase();
+		
+		if(expectHallState != g_hallState)
+		{
+			if(hallErrorCnt++ > 200)
+			{
+				g_sysProtect.hallerr = 0b1;
+				g_motorState = MOTOR_STOP;
+			}
+		}
 
+		lastHallState = g_hallState;
+
+		expectHallState = Next_Hall_State_Expected(g_motorDirection,g_hallState);
+	}
+}
+
+void Manage_Motor_Speed(void)
+{
+	
+}
 

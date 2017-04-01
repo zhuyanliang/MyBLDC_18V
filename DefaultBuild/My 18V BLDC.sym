@@ -1,0 +1,203 @@
+#05
+;FF     PUBLIC
+02FFED8@@CPR1
+02FFEDE@@FPRF1
+02FFEDF@@FPRF2
+02FFEDE@@FPRFP
+02FFED8@@FPRS
+02FFEDC@@FPRXD
+02FFEDC@@FPRXP
+02FFEDD@@FPRXS
+01003D3@@fdiv
+0100367@@finfws
+010038A@@fmthrr
+01001A8@@fmul
+01002BB@@fnor
+0100331@@fret
+010034F@@fret0
+0100352@@fret0s
+010035B@@fret0x
+01002F3@@fstore
+01002E6@@funite
+010035F@@fx0div
+010034B@@fxinex
+010037F@@fxnan1
+010037A@@fxnan2
+0100363@@fxover
+0100185@@lsadd
+0100194@@lsband
+01004FE@@lstof
+0100185@@luadd
+0100194@@luband
+0100514@@lutof
+010051D@@lutofe
+02FF5D8_?DATA
+02FF5E0_?DATAL
+02FF5E0_?DATS
+02FF5E0_?INIS
+02FF5E0_?INIT
+02FF5E0_?INITL
+0100002_?RLINIT
+0100002_?R_INIS
+0100018_?R_INIT
+02FF598_@BRKADR
+02FF586_@DIVR
+02FF580_@FNCENT
+02FF500_@FNCTBL
+02FF58A_@LDIVR
+0000000_@MAA
+02FF5BA_@MEMBTM
+02FF59A_@MEMTOP
+02FFED8_@RTARG0
+02FFED9_@RTARG1
+02FFEDA_@RTARG2
+02FFEDB_@RTARG3
+02FFEDC_@RTARG4
+02FFEDD_@RTARG5
+02FFEDE_@RTARG6
+02FFEDF_@RTARG7
+01FFE20_@SADBEG
+00000C0_@SADSIZ
+02FF582_@SEED
+02FFED4_@SEGAX
+02FFED5_@SEGBC
+02FFED6_@SEGDE
+02FFED7_@SEGHL
+00FFED4_@STBEG
+00FF5E0_@STEND
+02FF592_@TOKPTR
+0100185_@cend
+01000D8_@cstart
+0100004_@vect04
+010000A_@vect0a
+010000C_@vect0c
+010000E_@vect0e
+010002C_@vect2c
+0100CF8_ADC_Average_Original
+0100C85_ADC_Convert_Original
+0100CB9_ADC_Convert_Volt
+0102014_BRIDGE_LOW_FWD
+010201C_BRIDGE_LOW_KEEP_FWD
+0102034_BRIDGE_LOW_KEEP_REV
+010202C_BRIDGE_LOW_REV
+010090A_Commutate_Phase
+0100C2D_Delay_1Us
+0100BF5_Delay_Ms
+0100E57_Get_Button_State
+010080A_Get_Hall_State
+01009E1_Hall_Interupt_Process
+010097F_Manage_Motor_Phase
+0100DEE_Manege_Led
+010096A_Motor_Brake
+010095E_Motor_Stop
+0100838_Next_Hall_State_Expected
+010200C_PWM_OUT_EN_FWD
+0102024_PWM_OUT_EN_REV
+0100C2F_R_ADC_Create
+0100C74_R_ADC_Get_Result
+0100C70_R_ADC_Set_OperationOff
+0100C6C_R_ADC_Set_OperationOn
+0100C64_R_ADC_Start
+0100C68_R_ADC_Stop
+01007EE_R_CGC_Create
+01007FE_R_CGC_Get_ResetSource
+0100BCB_R_INTC1_Start
+0100BD2_R_INTC1_Stop
+0100BD9_R_INTC2_Start
+0100BE0_R_INTC2_Stop
+0100BE7_R_INTC3_Start
+0100BEE_R_INTC3_Stop
+0100B7C_R_INTC_Create
+01007AC_R_MAIN_UserInit
+0100A2C_R_PORT_Create
+01007BC_R_Systeminit
+0100A8B_R_TAU0_Channel0_Start
+0100A9C_R_TAU0_Channel0_Stop
+0100A36_R_TAU0_Create
+0100AAD_R_TMR_RD1_Create
+0100B3C_R_TMR_RD1_Start
+0100B5C_R_TMR_RD1_Stop
+0100E62_R_WDT_Create
+0100E72_R_WDT_Restart
+0100DD8_Set_Led
+01008E2_Set_PWM_Duty
+0100DB8_Task_Btn_Scan
+0100D53_Task_Current_Check
+0100DD6_Task_Delay
+0100DB3_Task_LED
+0100DB2_Task_Motor
+0100DD7_Task_Process_ProtectInfo
+0100D98_Task_Temperature_Check
+0100D2B_Task_Voltage_Check
+02FF596_errno
+0100EBA_exit
+02FF5DA_g_btnPress
+02FF5C4_g_elapse2Ms
+02FF5CD_g_hallState
+02FF5D0_g_justForTest
+02FF5C8_g_ledSet
+02FF5CE_g_motorCurrent
+02FF5DB_g_motorDirection
+02FF5CC_g_motorState
+02FF5C6_g_sysProtect
+02FF5C0_g_sysTick
+01007E6_hdwinit
+0100746_main
+01003B4_matherr
+0100E76_stkinit
+;FF     @cstart
+;FF     r_main
+<0102000L0016
+02FF5D8_tskList
+;FF     r_systeminit
+;FF     r_cg_cgc
+;FF     r_cg_cgc_user
+;FF     u_motor_driver
+<02FF5BB_cnt
+02FF5BD_expectHallState
+02FF5BE_hallErrorCnt
+02FF5BC_lastHallState
+02FF5BA_lasthallState
+;FF     r_cg_port
+;FF     r_cg_port_user
+;FF     r_cg_timer
+;FF     r_cg_timer_user
+<0100561_r_tau0_channel0_interrupt
+;FF     r_cg_intc
+;FF     r_cg_intc_user
+<01005BB_r_intc1_interrupt
+01005F9_r_intc2_interrupt
+0100637_r_intc3_interrupt
+;FF     u_gvar
+;FF     u_common_func
+;FF     r_cg_adc
+;FF     r_cg_adc_user
+;FF     u_task_manage
+<02FF5DD_cnt
+02FF5DC_cnt
+;FF     u_led
+<02FF5D6_const_On_Time
+02FF5DF_elapse100Ms
+02FF5DE_flashFlag
+02FF5D5_flash_times
+02FF5D4_interval
+;FF     u_button
+;FF     r_cg_wdt
+;FF     r_cg_wdt_user
+<0100675_r_wdt_interrupt
+;FF     @ladd
+;FF     @lband
+;FF     @SEGREG
+;FF     @stkinit
+;FF     @RTARG0
+;FF     exit
+;FF     m_fmul
+;FF     m_fcom1
+;FF     m_fcom5
+;FF     m_fcom6
+;FF     m_fdiv
+;FF     m_lstof
+;FF     m_lutof
+;FF     @rom
+=
+

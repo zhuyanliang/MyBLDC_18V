@@ -11,5 +11,7 @@ void 	Commutate_Phase(bool isFwd,uint8_t state);
 void 	Set_PWM_Duty(uint16_t val);
 void 	Motor_Stop(void);
 void 	Motor_Brake(void);
+void 	Manage_Motor_Phase(void);
+void 	Hall_Interupt_Process(void);
 
 #endif

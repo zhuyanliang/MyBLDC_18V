@@ -23,7 +23,7 @@
 * Device(s)    : R5F104BA
 * Tool-Chain   : CA78K0R
 * Description  : This file implements device driver for INTC module.
-* Creation Date: 2017/3/31
+* Creation Date: 2017/4/1
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -41,6 +41,7 @@ Includes
 #include "r_cg_macrodriver.h"
 #include "r_cg_intc.h"
 /* Start user code for include. Do not edit comment generated here */
+#include "u_include.h"
 /* End user code. Do not edit comment generated here */
 #include "r_cg_userdefine.h"
 
@@ -59,6 +60,7 @@ Global variables and functions
 __interrupt static void r_intc1_interrupt(void)
 {
     /* Start user code. Do not edit comment generated here */
+    Hall_Interupt_Process();
     /* End user code. Do not edit comment generated here */
 }
 
@@ -71,6 +73,7 @@ __interrupt static void r_intc1_interrupt(void)
 __interrupt static void r_intc2_interrupt(void)
 {
     /* Start user code. Do not edit comment generated here */
+    Hall_Interupt_Process();
     /* End user code. Do not edit comment generated here */
 }
 
@@ -83,6 +86,7 @@ __interrupt static void r_intc2_interrupt(void)
 __interrupt static void r_intc3_interrupt(void)
 {
     /* Start user code. Do not edit comment generated here */
+    Hall_Interupt_Process();
     /* End user code. Do not edit comment generated here */
 }
 

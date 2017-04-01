@@ -1,6 +1,4 @@
----- g_wait2Ms Matches (5 in 4 files) ----
-R_cg_timer_user.c:		g_wait2Ms = false;
-R_main.c:		g_wait2Ms = true;
-R_main.c:        while(g_wait2Ms);
-U_gvar.c:bool 	 g_wait2Ms;
-U_gvar.h:extern bool 		g_wait2Ms;
+---- g_MotorState Matches (3 in 3 files) ----
+My 18V BLDC.Administrator.mtud:      <WatchStatement6>g_MotorState</WatchStatement6>
+U_gvar.c:E_MOTOR_STATUS	g_MotorState;
+U_motor_driver.c:	if(MOTOR_RUNNING == g_MotorState)
