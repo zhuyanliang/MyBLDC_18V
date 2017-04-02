@@ -18,9 +18,9 @@
 #define Voltage_Low_Value_AD	(uint16_t)(Voltage_Low_Value*1.0F*Rbottom/(Rtop+Rbottom)/VDD*ADC10BITS)
 
 /*current check parameters*/
-#define R_curchk				0.002F
-#define Current_Short_Value		100U	/*uint: A*/
-#define Current_Overload_Value	45U	/*uint: A*/
+#define R_curchk				0.001F
+#define Current_Short_Value		100U	/* uint: A*/
+#define Current_Overload_Value	45U		/* uint: A*/
 #define Current_Short_AD		(uint16_t)(Current_Short_Value*R_curchk/VDD*ADC10BITS)
 #define Current_Overload_AD		(uint16_t)(Current_Overload_Value*R_curchk/VDD*ADC10BITS)
 
@@ -31,5 +31,9 @@
 #define Adc_Channel_Current	1U
 #define Adc_Channel_Voltage	2U
 #define Adc_Channel_MOSTemp	3U
+
+
+#define Enable		true
+#define NeedBrake	Enable
 
 #endif

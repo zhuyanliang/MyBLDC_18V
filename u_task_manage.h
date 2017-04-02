@@ -4,10 +4,11 @@
 void Task_Voltage_Check(void);
 void Task_Current_Check(void);
 void Task_Temperature_Check(void);
-void Task_Motor(void);
+void Task_Motor_Control(void);
 void Task_LED(void);
 void Task_Btn_Scan(void);
 void Task_Delay(void);
-void Task_Process_ProtectInfo(void);
+void Task_Motor_State(void);
+void Task_Manage_ProtectInfo(void);
 
 #endif

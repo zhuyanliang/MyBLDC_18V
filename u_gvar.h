@@ -45,7 +45,7 @@ typedef struct
 {
 	uint8_t interval;  		/* flash interval uint:10Ms */
 	uint8_t flash_times;  
-	uint8_t const_On_Time; 	/* led on duration time  uint:10Ms*/
+	uint16_t const_On_Time; 	/* led on duration time  uint:10Ms*/
 }S_LED_SET;
 
 extern uint32_t 		g_sysTick;

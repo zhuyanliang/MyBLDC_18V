@@ -8,7 +8,7 @@
 #define Led_Off()		(LED = 0b1)
 #define Led_Trig()		(LED = ~LED)
 
-void Set_Led(uint8_t interval,uint8_t flashtimes,uint8_t constontimes);
+void Led_Set(uint8_t interval,uint8_t flashtimes,uint16_t constontimes);
 void Manege_Led(void);
 
 #endif

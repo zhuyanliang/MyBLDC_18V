@@ -61,10 +61,11 @@ void Task_Temperature_Check(void)
 	}
 }
 
-void Task_Motor(void)
+void Task_Motor_Control(void)
 {
 	/* 1. manage motor speed*/
 	/* 2. control the motor commutate*/
+	
 	Manage_Motor_Phase();
 }
 
@@ -96,9 +97,84 @@ void Task_Btn_Scan(void)
 }
 
 void Task_Delay(void)
-{}
-void Task_Process_ProtectInfo(void)
-{}
+{
+	
+}
 
+/*
+ * execution cycle is 10Ms
+ *
+ */
+void Task_Motor_State(void)
+{
+	static uint8_t cnt = 0;
+	
+	if(g_btnPress)
+	{
+		if(0 == *((uint8_t*)&g_sysProtect))
+		{			
+			if(cnt++ < 10)
+			{
+				g_motorState = MOTOR_STARTUP;
+			}
+			else
+			{
+				cnt = 10;
+				g_motorState = MOTOR_RUNNING;
+				PWM_On();
+				Manage_Motor_Phase();
+				Hall_Int_On();
+			}
+		}
+		else
+		{
+			cnt = 0;
+			/* motor exception information process */
+			g_motorState = MOTOR_STOP;
+		}
+	}
+	else
+	{
+		cnt = 0;
+		if(NeedBrake)
+		{
+			g_motorState = MOTOR_BRAKE;
+		}
+		else
+		{
+			g_motorState = MOTOR_STOP;
+		}
+	}
+}
 
+void Task_Manage_ProtectInfo(void)
+{
+	uint8_t protectInfo =  *(uint8_t*)&g_sysProtect;
+	if((0 == protectInfo) && g_btnPress)
+	{
+		return;
+	}
+	else
+	{
+		if(g_sysProtect.hallerr)
+		{
+			Led_Set(30,7,200);
+		}
+		if(g_sysProtect.ovCur)
+		{
+			Led_Set(30,6,200);
+		}
+		if(g_sysProtect.ovload)
+		{
+			Led_Set(30,5,200);
+		}
+		if(g_sysProtect.lowVolt)
+		{
+			Led_Set(30,4,200);
+		}
+		
+	}
+
+	
+}
 

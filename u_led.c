@@ -3,9 +3,9 @@
 /*
  *  interval  - on and off interval time uint:100Ms
  *  flashtimes    
- *  constontimes  uint:100Ms
+ *  constontimes  uint:10Ms  
  */
-void Set_Led(uint8_t interval,uint8_t flashtimes,uint8_t constontimes)
+void Led_Set(uint8_t interval,uint8_t flashtimes,uint16_t constontimes)
 {
 	g_ledSet.interval 		= interval;
 	g_ledSet.flash_times 	= flashtimes;
@@ -16,20 +16,11 @@ void Set_Led(uint8_t interval,uint8_t flashtimes,uint8_t constontimes)
 void Manege_Led(void)
 {
 	static bool flashFlag = false; 
-	static uint8_t elapse100Ms = 0;
+	static uint8_t elapse10Ms = 0;
 	
 	static uint8_t interval;
 	static uint8_t flash_times;
-	static uint8_t const_On_Time;
-
-	if(elapse100Ms++ < 10U)
-	{
-		return;
-	}
-	else
-	{
-		elapse100Ms = 0U;
-	}
+	static uint16_t const_On_Time;
 	
 	if(!flashFlag)
 	{
@@ -39,6 +30,7 @@ void Manege_Led(void)
 		{
 			const_On_Time = 0;
 			flashFlag = true;
+			interval = 0;
 		}
 	}
 	else
@@ -62,8 +54,10 @@ void Manege_Led(void)
 		{
 			flashFlag = false;
 			flash_times = 0;
+			const_On_Time = 0;
 		}
 	}
 }
+
 
 

@@ -65,15 +65,14 @@ void main(void)
     R_MAIN_UserInit();
     /* Start user code. Do not edit comment generated here */
 	
-	Set_Led(3,4,20);
-	
     for(;;)
     {
 		g_justForTest++;
 
 		// loop execution always
 		Task_Current_Check();
-		Task_Motor();
+		Task_Motor_State();
+		Task_Motor_Control();
 
 		//execution cycle is 2Ms
 		if(g_elapse2Ms)
@@ -82,7 +81,7 @@ void main(void)
 			g_elapse2Ms = false;
 
 			R_WDT_Restart();
-			
+			Task_Manage_ProtectInfo();
 			switch(tskList++)
 			{
 			case 0:
@@ -96,7 +95,7 @@ void main(void)
 				Task_Btn_Scan();
 				break;
 			case 3:
-				Task_Temperature_Check();
+				//Task_Temperature_Check();
 				break;
 			default:
 				tskList = 0;
@@ -119,7 +118,7 @@ void R_MAIN_UserInit(void)
 	hdwinit();
 
 	R_TAU0_Channel0_Start();	/* system tick */
-	R_TMR_RD1_Start();		 	/* PWM generate*/
+	//R_TMR_RD1_Start();		 	/* PWM generate*/
 	
     EI();
     /* End user code. Do not edit comment generated here */

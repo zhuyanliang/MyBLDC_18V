@@ -109,8 +109,8 @@ void Commutate_Phase(bool isFwd,uint8_t state)
 	else
 	{
 		P1 		&= BRIDGE_LOW_KEEP_REV[state];
-		TRDOER1 = BRIDGE_LOW_REV[state];   /*enable relative high bridge PWM pin*/	
-		P1 		|= PWM_OUT_EN_REV[state];  /*set high to enabled low bridge pin, */ 
+		TRDOER1 = PWM_OUT_EN_REV[state];   /*enable relative high bridge PWM pin*/	
+		P1 		|= BRIDGE_LOW_REV[state];  /*set high to enabled low bridge pin, */ 
 	}
 	
 }
@@ -134,6 +134,7 @@ void Manage_Motor_Phase(void)
 	if(MOTOR_RUNNING == g_motorState)
 	{
 		static uint8_t lasthallState;
+		
 		g_hallState = Get_Hall_State();
 		
 		if(g_hallState == lasthallState)
@@ -182,7 +183,6 @@ void Hall_Interupt_Process(void)
 			if(hallErrorCnt++ > 200)
 			{
 				g_sysProtect.hallerr = 0b1;
-				g_motorState = MOTOR_STOP;
 			}
 		}
 
