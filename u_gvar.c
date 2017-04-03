@@ -36,7 +36,7 @@ uint16_t 		g_motorCurrent;
  * false -- reverse
  * true  -- forward
  */
-bool 			g_motorDirection = false;
+bool 			g_motorDirection = true;
 
 /*just for test system tick*/
 uint32_t	g_justForTest; 

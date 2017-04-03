@@ -51,7 +51,7 @@ void Task_Current_Check(void)
 
 void Task_Temperature_Check(void)
 {
-	if(ADC_Average_Original(3U,Adc_Channel_MOSTemp) > Temp_Over_AD)
+	if(ADC_Average_Original(3U,Adc_Channel_MOSTemp) < Temp_Over_AD)
 	{
 		g_sysProtect.mos_ovTemp = 0b1;
 	}
@@ -65,7 +65,7 @@ void Task_Motor_Control(void)
 {
 	/* 1. manage motor speed*/
 	/* 2. control the motor commutate*/
-	
+	Manage_Motor_State();
 	Manage_Motor_Phase();
 }
 
@@ -101,52 +101,6 @@ void Task_Delay(void)
 	
 }
 
-/*
- * execution cycle is 10Ms
- *
- */
-void Task_Motor_State(void)
-{
-	static uint8_t cnt = 0;
-	
-	if(g_btnPress)
-	{
-		if(0 == *((uint8_t*)&g_sysProtect))
-		{			
-			if(cnt++ < 10)
-			{
-				g_motorState = MOTOR_STARTUP;
-			}
-			else
-			{
-				cnt = 10;
-				g_motorState = MOTOR_RUNNING;
-				PWM_On();
-				Manage_Motor_Phase();
-				Hall_Int_On();
-			}
-		}
-		else
-		{
-			cnt = 0;
-			/* motor exception information process */
-			g_motorState = MOTOR_STOP;
-		}
-	}
-	else
-	{
-		cnt = 0;
-		if(NeedBrake)
-		{
-			g_motorState = MOTOR_BRAKE;
-		}
-		else
-		{
-			g_motorState = MOTOR_STOP;
-		}
-	}
-}
-
 void Task_Manage_ProtectInfo(void)
 {
 	uint8_t protectInfo =  *(uint8_t*)&g_sysProtect;
@@ -172,9 +126,7 @@ void Task_Manage_ProtectInfo(void)
 		{
 			Led_Set(30,4,200);
 		}
-		
+		Motor_Stop();
 	}
-
-	
 }
 

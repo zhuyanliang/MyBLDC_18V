@@ -39,6 +39,12 @@ uint8_t Get_Hall_State(void)
 	return state;	
 }
 
+/**/
+void Scan_Hall_State(void)
+{
+	g_hallState = Get_Hall_State();
+}
+
 /*
  * isFWD - true  :Foreward direction expected 
  * isFWD - false :Reversal direction expected
@@ -48,41 +54,41 @@ uint8_t Next_Hall_State_Expected(bool isFwd,uint8_t state)
 	if(isFwd)
 	{
 		if(1U == state)
-			return 5U;
-		else if(2U == state)
 			return 3U;
-		else if(3U == state)
-			return 1U;
-		else if(4U == state)
+		else if(2U == state)
 			return 6U;
-		else if(5U == state)
-			return 4U;
-		else if(6U == state)
+		else if(3U == state)
 			return 2U;
+		else if(4U == state)
+			return 5U;
+		else if(5U == state)
+			return 1U;
+		else if(6U == state)
+			return 4U;
 		else
 			return 0;
 	}
 	else
 	{
 		if(1U == state)
-			return 3U;
-		else if(2U == state)
-			return 6U;
-		else if(3U == state)
-			return 2U;
-		else if(4U == state)
 			return 5U;
-		else if(5U == state)
+		else if(2U == state)
+			return 3U;
+		else if(3U == state)
 			return 1U;
-		else if(6U == state)
+		else if(4U == state)
+			return 6U;
+		else if(5U == state)
 			return 4U;
+		else if(6U == state)
+			return 2U;
 		else
 			return 0;
 	}
 }
 
 
-void Set_PWM_Duty(uint16_t val)
+void PWM_Set_Duty(uint16_t val)
 {
 	if(val > SPEED_MAX)
 	{
@@ -112,7 +118,6 @@ void Commutate_Phase(bool isFwd,uint8_t state)
 		TRDOER1 = PWM_OUT_EN_REV[state];   /*enable relative high bridge PWM pin*/	
 		P1 		|= BRIDGE_LOW_REV[state];  /*set high to enabled low bridge pin, */ 
 	}
-	
 }
 
 void Motor_Stop(void)
@@ -129,18 +134,34 @@ void Motor_Brake(void)
 	P1 |= 0x70;                 //set all low bridge pin high to brake,  
 }
 
-void Manage_Motor_Phase(void)
+void Get_Hall_Commutate_Phase(void)
 {
-	if(MOTOR_RUNNING == g_motorState)
+	static uint8_t lasthallState;
+	
+	g_hallState = Get_Hall_State();
+
+	Commutate_Phase(g_motorDirection,g_hallState);
+	lasthallState = g_hallState;
+}
+
+void Manage_Motor_Phase(void)
+{	
+	static uint16_t cnt = SPEED_MIN;
+	if(MOTOR_STARTUP == g_motorState)
 	{
-		static uint8_t lasthallState;
-		
-		g_hallState = Get_Hall_State();
-		
-		if(g_hallState == lasthallState)
-			return;
-		Commutate_Phase(g_motorDirection,g_hallState);
-		lasthallState = g_hallState;
+		PWM_On();
+
+		cnt += 10;
+		if(cnt > SPEED_MAX)
+			cnt = SPEED_MAX-1;
+		PWM_Set_Duty(cnt);
+		Get_Hall_Commutate_Phase();
+		Hall_Int_On();
+		return;
+	}
+	else if(MOTOR_RUNNING == g_motorState)
+	{
+		Get_Hall_Commutate_Phase();
 	}
 	else if(MOTOR_BRAKE == g_motorState)
 	{
@@ -177,20 +198,55 @@ void Hall_Interupt_Process(void)
 	if(g_hallState != lastHallState)
 	{
 		Manage_Motor_Phase();
-		
-		if(expectHallState != g_hallState)
+
+		if( MOTOR_RUNNING == g_motorState)
 		{
-			if(hallErrorCnt++ > 200)
+			if(expectHallState != g_hallState)
 			{
-				g_sysProtect.hallerr = 0b1;
+				if(hallErrorCnt++ > 200)
+				{
+					g_sysProtect.hallerr = 0b1;
+				}
 			}
+			expectHallState = Next_Hall_State_Expected(g_motorDirection,g_hallState);
+			lastHallState = g_hallState;
 		}
-
-		lastHallState = g_hallState;
-
-		expectHallState = Next_Hall_State_Expected(g_motorDirection,g_hallState);
 	}
 }
+
+void Manage_Motor_State(void)
+{
+	static uint16_t cnt = 0;
+	
+	if(g_btnPress)
+	{
+		if(0 == *((uint8_t*)&g_sysProtect))
+		{	
+			if(cnt++ < 800)
+			{
+				g_motorState = MOTOR_STARTUP;
+			}
+			else
+			{
+				cnt = 900;
+				g_motorState = MOTOR_RUNNING;
+			}
+			
+		}
+		else
+		{
+			/* motor exception information process */
+			g_motorState = MOTOR_STOP;
+		}
+	}
+	else
+	{
+		cnt = 0;
+		
+		g_motorState = MOTOR_STOP;
+	}
+}
+
 
 void Manage_Motor_Speed(void)
 {

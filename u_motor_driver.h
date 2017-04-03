@@ -11,12 +11,14 @@
 #define	Hall_Int_Off()  	R_INTC1_Stop();R_INTC2_Stop();R_INTC3_Stop()
 
 uint8_t Get_Hall_State(void);
+void 	Scan_Hall_State(void);
 uint8_t Next_Hall_State_Expected(bool isFwd,uint8_t state);
 void 	Commutate_Phase(bool isFwd,uint8_t state);
-void 	Set_PWM_Duty(uint16_t val);
+void 	PWM_Set_Duty(uint16_t val);
 void 	Motor_Stop(void);
 void 	Motor_Brake(void);
 void 	Manage_Motor_Phase(void);
 void 	Hall_Interupt_Process(void);
+void 	Manage_Motor_State(void);
 
 #endif

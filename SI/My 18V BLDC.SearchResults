@@ -1,12 +1,4 @@
----- g_motorState Matches (11 in 5 files) ----
-My 18V BLDC.Administrator.mtud:      <WatchStatement3>g_motorState</WatchStatement3>
-U_gvar.c:E_MOTOR_STATUS	g_motorState;
-U_gvar.h:extern E_MOTOR_STATUS	g_motorState;
-U_motor_driver.c:	if(MOTOR_RUNNING == g_motorState)
-U_motor_driver.c:	else if(MOTOR_BRAKE == g_motorState)
-U_motor_driver.c:	else if(MOTOR_STOP == g_motorState)
-U_task_manage.c:				g_motorState = MOTOR_STARTUP;
-U_task_manage.c:				g_motorState = MOTOR_RUNNING;
-U_task_manage.c:			g_motorState = MOTOR_STOP;
-U_task_manage.c:			g_motorState = MOTOR_BRAKE;
-U_task_manage.c:			g_motorState = MOTOR_STOP;
+---- Task_Motor_State Matches (3 in 3 files) ----
+R_main.c:		Task_Motor_State();
+U_task_manage.c:void Task_Motor_State(void)
+U_task_manage.h:void Task_Motor_State(void);

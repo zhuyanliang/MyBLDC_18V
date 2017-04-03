@@ -23,7 +23,7 @@
 * Device(s)    : R5F104BA
 * Tool-Chain   : CA78K0R
 * Description  : This file implements main function.
-* Creation Date: 2017/4/1
+* Creation Date: 2017/4/3
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -67,12 +67,10 @@ void main(void)
 	
     for(;;)
     {
-		g_justForTest++;
-
 		// loop execution always
-		Task_Current_Check();
-		Task_Motor_State();
-		Task_Motor_Control();
+		//Task_Current_Check();
+		
+		Task_Motor_Control(); 
 
 		//execution cycle is 2Ms
 		if(g_elapse2Ms)
@@ -88,14 +86,15 @@ void main(void)
 				Task_Voltage_Check();
 				break;
 			case 1:
-				Task_LED();
-				//Led_Trig();
+				//Task_LED();
+				Led_Trig();
 				break;
 			case 2:
 				Task_Btn_Scan();
 				break;
 			case 3:
-				//Task_Temperature_Check();
+				Task_Temperature_Check();
+				Scan_Hall_State();
 				break;
 			default:
 				tskList = 0;

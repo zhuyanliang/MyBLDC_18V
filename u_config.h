@@ -3,7 +3,7 @@
 #define CONFIG_H
 
 #define SPEED_MAX	4799U
-#define SPEED_MIN	1000U
+#define SPEED_MIN	800U
 
 #define VDD			5U
 #define AVREF		VDD
@@ -26,7 +26,8 @@
 
 /*mosfet temperature parameters*/
 #define R_div				10U
-#define Temp_Over_AD		100U  /*!!!!!!!!!!rember to modify*/
+//#define Temp_Over_AD		100U  /*!!!!!!!!!!rember to modify*/
+#define	Temp_Over_AD         23U   //1.2676/11.2676/5*1024
 
 #define Adc_Channel_Current	1U
 #define Adc_Channel_Voltage	2U
