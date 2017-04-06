@@ -69,7 +69,6 @@ void main(void)
     {
 		// loop execution always
 		//Task_Current_Check();
-		
 		Task_Motor_Control(); 
 
 		//execution cycle is 2Ms
@@ -80,6 +79,7 @@ void main(void)
 
 			R_WDT_Restart();
 			Task_Manage_ProtectInfo();
+			
 			switch(tskList++)
 			{
 			case 0:
