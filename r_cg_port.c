@@ -23,7 +23,7 @@
 * Device(s)    : R5F104BA
 * Tool-Chain   : CA78K0R
 * Description  : This file implements device driver for PORT module.
-* Creation Date: 2017/4/3
+* Creation Date: 2017/4/7
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -57,10 +57,13 @@ void R_PORT_Create(void)
 {
     P0 = _00_Pn0_OUTPUT_0;
     P1 = _00_Pn4_OUTPUT_0 | _00_Pn5_OUTPUT_0 | _00_Pn6_OUTPUT_0;
+    P14 = _00_Pn7_OUTPUT_0;
     PMC0 = _00_PMCn0_DI_ON | _02_PMCn1_NOT_USE | _FC_PMC0_DEFAULT;
+    PMC14 = _00_PMCn7_DI_ON | _7F_PMC14_DEFAULT;
     PM0 = _00_PMn0_MODE_OUTPUT | _02_PMn1_NOT_USE | _FC_PM0_DEFAULT;
     PM1 = _01_PMn0_NOT_USE | _02_PMn1_NOT_USE | _04_PMn2_NOT_USE | _08_PMn3_NOT_USE | _00_PMn4_MODE_OUTPUT |
           _00_PMn5_MODE_OUTPUT | _00_PMn6_MODE_OUTPUT | _80_PMn7_NOT_USE;
+    PM14 = _00_PMn7_MODE_OUTPUT | _7F_PM14_DEFAULT;
 }
 
 /* Start user code for adding. Do not edit comment generated here */

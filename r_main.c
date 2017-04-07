@@ -23,7 +23,7 @@
 * Device(s)    : R5F104BA
 * Tool-Chain   : CA78K0R
 * Description  : This file implements main function.
-* Creation Date: 2017/4/3
+* Creation Date: 2017/4/7
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -77,6 +77,7 @@ void main(void)
 			static uint8_t tskList = 0;
 			g_elapse2Ms = false;
 
+			SwitchTrig();	
 			R_WDT_Restart();
 			Task_Manage_ProtectInfo();
 			
