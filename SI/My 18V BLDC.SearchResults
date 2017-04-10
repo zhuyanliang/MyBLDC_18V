@@ -1,4 +1,3 @@
----- Task_Motor_State Matches (3 in 3 files) ----
-R_main.c:		Task_Motor_State();
-U_task_manage.c:void Task_Motor_State(void)
-U_task_manage.h:void Task_Motor_State(void);
+---- Task_Motor_Speed Matches (2 in 2 files) ----
+R_main.c:			Task_Motor_Speed();
+U_task_manage.h:void Task_Motor_Speed(void);

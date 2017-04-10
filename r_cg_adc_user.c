@@ -78,7 +78,7 @@ float ADC_Convert_Volt(uint8_t channel)
 {
 	uint16_t orival = ADC_Convert_Original(channel);
 	
-	float ret = (float)orival/1024U*5.0;
+	float ret = (float)orival/1024U*5.0F;
 
 	return ret;
 }

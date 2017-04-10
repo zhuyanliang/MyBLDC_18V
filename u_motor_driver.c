@@ -25,6 +25,7 @@ const uint8_t PWM_OUT_EN_REV[8]   		= {0xff,0x7f,0xdf,0xdf,0xbf,0x7f,0xbf,0xff};
 const uint8_t BRIDGE_LOW_REV[8]   		= {0x00,0x20,0x10,0x20,0x40,0x40,0x10,0x00};
 const uint8_t BRIDGE_LOW_KEEP_REV[8]  	= {0x88,0xa8,0x98,0xa8,0xc8,0xc8,0x98,0x88};
 
+
 /*
  * Èý¸ö»ô¶ûÐÅºÅ: U V W 
  * U - 0x04 	V - 0x02	W - 0x01 
@@ -51,7 +52,7 @@ void Scan_Hall_State(void)
 */
 uint8_t Next_Hall_State_Expected(bool isFwd,uint8_t state)
 {
-	if(isFwd)
+	if(!isFwd)
 	{
 		if(1U == state)
 			return 3U;
@@ -136,36 +137,40 @@ void Motor_Brake(void)
 
 void Get_Hall_Commutate_Phase(void)
 {
-	static uint8_t lasthallState;
-	
 	g_hallState = Get_Hall_State();
 
 	Commutate_Phase(g_motorDirection,g_hallState);
-	lasthallState = g_hallState;
 }
 
 void Manage_Motor_Phase(void)
 {	
 	static uint16_t cnt = SPEED_MIN;
+	static bool 	firstStart = true;
+	
 	if(MOTOR_STARTUP == g_motorState)
 	{
-		PWM_On();
-
-		cnt += 10;
-		if(cnt > SPEED_MAX)
-			cnt = SPEED_MAX-1;
-		PWM_Set_Duty(cnt);
-		Get_Hall_Commutate_Phase();
-		Hall_Int_On();
+		if(firstStart)
+		{
+			firstStart = false;
+			PWM_On();
+			Get_Hall_Commutate_Phase();
+			Hall_Int_On();
+		}
+		else
+		{
+			Get_Hall_Commutate_Phase();
+		}
 		return;
 	}
 	else if(MOTOR_RUNNING == g_motorState)
 	{
 		Get_Hall_Commutate_Phase();
+		firstStart = true;
 	}
 	else if(MOTOR_BRAKE == g_motorState)
 	{
 		static uint8_t cnt;
+		firstStart = true;
 		if(cnt++ < 10)
 		{
 			Motor_Stop();
@@ -181,6 +186,7 @@ void Manage_Motor_Phase(void)
 	}
 	else if(MOTOR_STOP == g_motorState)
 	{
+		firstStart = true;
 		Motor_Stop();
 	}
 }
@@ -215,20 +221,17 @@ void Hall_Interupt_Process(void)
 }
 
 void Manage_Motor_State(void)
-{
-	static uint16_t cnt = 0;
-	
+{	
 	if(g_btnPress)
 	{
 		if(0 == *((uint8_t*)&g_sysProtect))
 		{	
-			if(cnt++ < 800)
+			if(g_speedPWM < SPEED_Expected)
 			{
 				g_motorState = MOTOR_STARTUP;
 			}
 			else
 			{
-				cnt = 900;
 				g_motorState = MOTOR_RUNNING;
 			}
 			
@@ -241,15 +244,32 @@ void Manage_Motor_State(void)
 	}
 	else
 	{
-		cnt = 0;
-		
 		g_motorState = MOTOR_STOP;
 	}
 }
 
-
-void Manage_Motor_Speed(void)
+/*
+ *  check if the motor stop completely
+ *  if motor stop return true,else return false
+ *
+ */
+bool Check_Motor_Stop(void)
 {
+	bool ret = false;
+	static uint32_t lastTick = 0;
 	
+	if(g_motorStopFlag)
+	{
+		if((g_sysTick - lastTick) > 80)
+			ret = true;
+	}
+	else
+	{
+		g_motorStopFlag = true;
+		lastTick = g_sysTick;
+	}
+
+	return ret;
 }
+
 

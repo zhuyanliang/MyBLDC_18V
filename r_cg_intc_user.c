@@ -60,6 +60,19 @@ Global variables and functions
 __interrupt static void r_intc1_interrupt(void)
 {
     /* Start user code. Do not edit comment generated here */
+    /* for calculate motor speed r/min */
+    static uint8_t speedCnt = 0;
+    static uint32_t	lastTick = 0;
+    speedCnt++;
+	if(speedCnt > 20)
+	{
+		speedCnt = 0;
+		g_dltSpeedTick = (uint16_t)(g_sysTick - lastTick);
+		lastTick = g_sysTick;
+	}
+    
+    g_motorStopFlag = false;
+    
     Hall_Interupt_Process();
     /* End user code. Do not edit comment generated here */
 }
@@ -73,6 +86,7 @@ __interrupt static void r_intc1_interrupt(void)
 __interrupt static void r_intc2_interrupt(void)
 {
     /* Start user code. Do not edit comment generated here */
+    g_motorStopFlag = false;
     Hall_Interupt_Process();
     /* End user code. Do not edit comment generated here */
 }
@@ -86,6 +100,7 @@ __interrupt static void r_intc2_interrupt(void)
 __interrupt static void r_intc3_interrupt(void)
 {
     /* Start user code. Do not edit comment generated here */
+    g_motorStopFlag = false;
     Hall_Interupt_Process();
     /* End user code. Do not edit comment generated here */
 }

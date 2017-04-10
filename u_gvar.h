@@ -58,8 +58,19 @@ extern uint8_t			g_hallState;
 extern bool 			g_btnPress;
 extern uint16_t 		g_motorCurrent;
 extern bool 			g_motorDirection;
+extern uint16_t			g_speedPWM;
+extern bool 			g_motorStopFlag;
 
+extern uint16_t 		g_voltLow;
+extern uint16_t			g_curShort;
+extern uint16_t			g_curOvLoad;
+extern uint16_t			g_ovTemp;
+
+extern uint16_t				g_speed;
+extern volatile uint16_t	g_dltSpeedTick;
 
 extern uint32_t			g_justForTest;
+
+void Global_Var_Init(void);
 
 #endif

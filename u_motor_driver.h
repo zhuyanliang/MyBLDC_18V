@@ -20,5 +20,6 @@ void 	Motor_Brake(void);
 void 	Manage_Motor_Phase(void);
 void 	Hall_Interupt_Process(void);
 void 	Manage_Motor_State(void);
+bool 	Check_Motor_Stop(void);
 
 #endif

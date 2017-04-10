@@ -68,7 +68,7 @@ void main(void)
     for(;;)
     {
 		// loop execution always
-		//Task_Current_Check();
+		Task_Current_Check();
 		Task_Motor_Control(); 
 
 		//execution cycle is 2Ms
@@ -76,10 +76,10 @@ void main(void)
 		{
 			static uint8_t tskList = 0;
 			g_elapse2Ms = false;
-
-			SwitchTrig();	
+	
 			R_WDT_Restart();
 			Task_Manage_ProtectInfo();
+			Task_Motor_SpeedControl();
 			
 			switch(tskList++)
 			{
@@ -87,11 +87,11 @@ void main(void)
 				Task_Voltage_Check();
 				break;
 			case 1:
-				//Task_LED();
-				Led_Trig();
+				Task_Manage_Led();
 				break;
 			case 2:
 				Task_Btn_Scan();
+				Task_Calc_Speed();
 				break;
 			case 3:
 				Task_Temperature_Check();
@@ -118,7 +118,8 @@ void R_MAIN_UserInit(void)
 	hdwinit();
 
 	R_TAU0_Channel0_Start();	/* system tick */
-	//R_TMR_RD1_Start();		 	/* PWM generate*/
+
+	Global_Var_Init();
 	
     EI();
     /* End user code. Do not edit comment generated here */

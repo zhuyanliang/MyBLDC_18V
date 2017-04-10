@@ -15,6 +15,6 @@
 #define SwitchTrig()	Switch = ~Switch
 
 void Led_Set(uint8_t interval,uint8_t flashtimes,uint16_t constontimes);
-void Manege_Led(void);
+void Task_Manage_Led(void);
 
 #endif

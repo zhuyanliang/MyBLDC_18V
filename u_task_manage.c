@@ -10,7 +10,7 @@ void Task_Voltage_Check(void)
 {
 	static uint8_t cnt = 0;
 
-	if(ADC_Average_Original(3U,Adc_Channel_Voltage) < Voltage_Low_Value_AD)
+	if(ADC_Average_Original(3U,Adc_Channel_Voltage) < g_voltLow)
 	{
 		if(cnt++ > 3)
 			g_sysProtect.lowVolt = 0b1;
@@ -27,19 +27,19 @@ void Task_Current_Check(void)
 	uint8_t i;
 	uint16_t sum = 0;
 
-	for(i=0;i<8;i++)
+	for(i=0;i<4U;i++)
 	{
 		g_motorCurrent = ADC_Convert_Original(Adc_Channel_Current);
-		if(g_motorCurrent > Current_Short_AD)
+		if(g_motorCurrent > g_curShort)
 		{
 			g_sysProtect.curshort = 0b1;
 		}
 		
 		sum += g_motorCurrent;
 	}
-	g_motorCurrent = sum/8U;
+	g_motorCurrent = sum/4U;
 	
-	if(g_motorCurrent > Current_Overload_AD)
+	if(g_motorCurrent > g_curOvLoad)
 	{
 		g_sysProtect.ovload = 0b1;
 	}
@@ -51,12 +51,16 @@ void Task_Current_Check(void)
 
 void Task_Temperature_Check(void)
 {
-	if(ADC_Average_Original(3U,Adc_Channel_MOSTemp) < Temp_Over_AD)
+	static uint8_t cnt = 0;
+	
+	if(ADC_Average_Original(3U,Adc_Channel_MOSTemp) < g_ovTemp)
 	{
-		g_sysProtect.mos_ovTemp = 0b1;
+		if(cnt++>3)
+			g_sysProtect.mos_ovTemp = 0b1;
 	}
 	else
 	{
+		cnt = 0;
 		g_sysProtect.mos_ovTemp = 0b0;
 	}
 }
@@ -69,36 +73,34 @@ void Task_Motor_Control(void)
 	Manage_Motor_Phase();
 }
 
-void Task_LED(void)
+void Task_Motor_SpeedControl(void)
 {
-	Manege_Led();
+	if(!g_btnPress)
+	{
+		g_speedPWM = SPEED_MIN;
+		return;
+	}
+	if(g_speedPWM < SPEED_Expected)
+	{
+		g_speedPWM += SPEED_Up_Rate;
+	}
+	if(g_speedPWM >= SPEED_MAX)
+	{
+		g_speedPWM = SPEED_MAX - 1;
+	}
+	
+	PWM_Set_Duty(g_speedPWM);
 }
 
 /*
  * execution cycle is 10Ms
  *
  */
-void Task_Btn_Scan(void)
-{
-	static uint8_t cnt = 0;
-	if(BUTTON)
-	{	
-		if(cnt++ > 2)
-		{
-			cnt = 2;
-			g_btnPress = true;
-		}
-	}
-	else
-	{
-		cnt = 0;
-		g_btnPress = false;
-	}
-}
+
 
 void Task_Delay(void)
 {
-	
+	 
 }
 
 void Task_Manage_ProtectInfo(void)
@@ -129,4 +131,28 @@ void Task_Manage_ProtectInfo(void)
 		Motor_Stop();
 	}
 }
+
+/*
+ * execution cycle is 10Ms
+ *
+ */
+void Task_Calc_Speed(void)
+{
+	static uint8_t cnt = 0;
+
+	if(MOTOR_STOP == g_motorState)
+		return;
+	
+	if(cnt++ > 20)
+	{
+		cnt = 0;
+		g_speed = 60000U/g_dltSpeedTick*10;
+	}
+
+	if(g_speed > 5000U)
+	{
+		Led_Set(25,3,100);
+	}
+}
+
 

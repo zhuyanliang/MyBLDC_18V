@@ -13,7 +13,7 @@ void Led_Set(uint8_t interval,uint8_t flashtimes,uint16_t constontimes)
 }
 
 /* execution cycle - 10Ms*/
-void Manege_Led(void)
+void Task_Manage_Led(void)
 {
 	static bool flashFlag = false; 
 	static uint8_t elapse10Ms = 0;
@@ -21,6 +21,14 @@ void Manege_Led(void)
 	static uint8_t interval;
 	static uint8_t flash_times;
 	static uint16_t const_On_Time;
+
+	if((g_ledSet.interval == 0) 
+	&& (g_ledSet.flash_times == 0) 
+	&& (g_ledSet.const_On_Time == 0U))
+	{
+		Led_Off();
+		return;
+	}
 	
 	if(!flashFlag)
 	{
