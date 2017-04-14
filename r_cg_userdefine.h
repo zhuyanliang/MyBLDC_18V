@@ -23,7 +23,7 @@
 * Device(s)    : R5F104BA
 * Tool-Chain   : CA78K0R
 * Description  : This file includes user definition.
-* Creation Date: 2017/4/7
+* Creation Date: 2017/4/14
 ***********************************************************************************************************************/
 
 #ifndef _USER_DEF_H

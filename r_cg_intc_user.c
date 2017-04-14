@@ -23,7 +23,7 @@
 * Device(s)    : R5F104BA
 * Tool-Chain   : CA78K0R
 * Description  : This file implements device driver for INTC module.
-* Creation Date: 2017/4/7
+* Creation Date: 2017/4/14
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -59,20 +59,33 @@ Global variables and functions
 ***********************************************************************************************************************/
 __interrupt static void r_intc1_interrupt(void)
 {
+
     /* Start user code. Do not edit comment generated here */
     /* for calculate motor speed r/min */
-    static uint8_t speedCnt = 0;
-    static uint32_t	lastTick = 0;
-    speedCnt++;
-	if(speedCnt > 20)
+    /* timer intval is 1/3 uS */
+#define _20Ms (_EA5F_TMRJ_TRJ0_VALUE+1)
+	static uint16_t lastTick = 0;
+	uint16_t current = 0;	
+
+	current = TRJ0;
+	if(current > lastTick)
 	{
-		speedCnt = 0;
-		g_dltSpeedTick = (uint16_t)(g_sysTick - lastTick);
-		lastTick = g_sysTick;
+		g_dltSpeedTick = _20Ms + lastTick - current; 
+		g_dltSpeedTick /= 3U;
+		if(g_elapse20MsCnt > 1U)
+			g_dltSpeedTick += ((g_elapse20MsCnt-1)*20000U);
 	}
-    
+	else
+	{
+		g_dltSpeedTick = lastTick - current; 
+		g_dltSpeedTick /= 3U;
+		if(0 != g_elapse20MsCnt)
+			g_dltSpeedTick += g_elapse20MsCnt*20000U;
+	}
+	g_elapse20MsCnt = 0;
+	lastTick = TRJ0;
+	
     g_motorStopFlag = false;
-    
     Hall_Interupt_Process();
     /* End user code. Do not edit comment generated here */
 }

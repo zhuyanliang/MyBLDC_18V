@@ -29,6 +29,14 @@ void Task_Manage_Led(void)
 		Led_Off();
 		return;
 	}
+
+	if((g_ledSet.interval == 0xFF) 
+	&& (g_ledSet.flash_times == 0xFF) 
+	&& (g_ledSet.const_On_Time == 0xFFFF))
+	{
+		Led_On();
+		return;
+	}
 	
 	if(!flashFlag)
 	{

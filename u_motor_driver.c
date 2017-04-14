@@ -214,6 +214,10 @@ void Hall_Interupt_Process(void)
 					g_sysProtect.hallerr = 0b1;
 				}
 			}
+			else
+			{
+				hallErrorCnt = 0;
+			}
 			expectHallState = Next_Hall_State_Expected(g_motorDirection,g_hallState);
 			lastHallState = g_hallState;
 		}
@@ -226,7 +230,7 @@ void Manage_Motor_State(void)
 	{
 		if(0 == *((uint8_t*)&g_sysProtect))
 		{	
-			if(g_speedPWM < SPEED_Expected)
+			if(g_speedPWM < (g_setSpeed - 200U))
 			{
 				g_motorState = MOTOR_STARTUP;
 			}

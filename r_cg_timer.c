@@ -23,7 +23,7 @@
 * Device(s)    : R5F104BA
 * Tool-Chain   : CA78K0R
 * Description  : This file implements device driver for TAU module.
-* Creation Date: 2017/4/7
+* Creation Date: 2017/4/14
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -114,6 +114,52 @@ void R_TAU0_Channel0_Stop(void)
     /* Mask channel 0 interrupt */
     TMMK00 = 1U;    /* disable INTTM00 interrupt */
     TMIF00 = 0U;    /* clear INTTM00 interrupt flag */
+}
+
+/***********************************************************************************************************************
+* Function Name: R_TMR_RJ0_Create
+* Description  : This function initializes the TMRJ0 module.
+* Arguments    : None
+* Return Value : None
+***********************************************************************************************************************/
+void R_TMR_RJ0_Create(void)
+{
+    TRJ0EN = 1U;    /* enable input clock supply */
+    TRJCR0 &= (uint8_t)~_01_TMRJ_COUNT_START;    /* disable TMRJ0 operation */
+    TRJMK0 = 1U;    /* disable INTTRJ0 interrupt */
+    TRJIF0 = 0U;    /* clear INTTRJ0 interrupt flag */
+    /* Set INTTRJ0 low priority */
+    TRJPR10 = 1U;
+    TRJPR00 = 1U;
+    TRJMR0 = _00_TMRJ_MODE_TIMER | _10_TMRJ_COUNT_SOURCE_FCLK8;
+    TRJIOC0 = _00_TMRJ_TRJIOC_INITIAL_VALUE;
+    TRJ0 = _EA5F_TMRJ_TRJ0_VALUE;
+}
+
+/***********************************************************************************************************************
+* Function Name: R_TMR_RJ0_Start
+* Description  : This function starts TMRJ0 counter.
+* Arguments    : None
+* Return Value : None
+***********************************************************************************************************************/
+void R_TMR_RJ0_Start(void)
+{
+    TRJIF0 = 0U;    /* clear INTTRJ0 interrupt flag */
+    TRJMK0 = 0U;    /* enable INTTRJ0 interrupt */
+    TRJCR0 |= _01_TMRJ_COUNT_START;    /* enable TMRJ operation */
+}
+
+/***********************************************************************************************************************
+* Function Name: R_TMR_RJ0_Stop
+* Description  : This function stops TMRJ0 counter.
+* Arguments    : None
+* Return Value : None
+***********************************************************************************************************************/
+void R_TMR_RJ0_Stop(void)
+{
+    TRJCR0 &= (uint8_t)~_01_TMRJ_COUNT_START;    /* disable TMRJ operation */
+    TRJMK0 = 1U;    /* disable INTTRJ0 interrupt */
+    TRJIF0 = 0U;    /* clear INTTRJ0 interrupt flag */
 }
 
 /***********************************************************************************************************************

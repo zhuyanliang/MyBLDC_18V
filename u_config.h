@@ -2,10 +2,12 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#define SPEED_MAX		4799U
-#define SPEED_MIN		800U
-#define SPEED_Expected	4798U
-#define SPEED_Up_Rate	10U
+#define SPEED_MAX		(int16_t)4799
+#define SPEED_MIN		(int16_t)0
+#define SPEED_EXPECT	3000U
+
+#define MAGNEDTIC_POLE_NUM 		4U
+#define SPEEDAVGNUM				4U
 
 
 #define VDD			5U

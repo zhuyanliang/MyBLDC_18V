@@ -1,3 +1,4 @@
----- Task_Motor_Speed Matches (2 in 2 files) ----
-R_main.c:			Task_Motor_Speed();
-U_task_manage.h:void Task_Motor_Speed(void);
+---- Task_Calc_Speed Matches (3 in 3 files) ----
+R_main.c:		Task_Calc_Speed();
+U_task_manage.c:void Task_Calc_Speed(void)
+U_task_manage.h:void Task_Calc_Speed(void);

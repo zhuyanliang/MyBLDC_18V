@@ -23,13 +23,14 @@
 * Device(s)    : R5F104BA
 * Tool-Chain   : CA78K0R
 * Description  : This file implements device driver for TAU module.
-* Creation Date: 2017/4/7
+* Creation Date: 2017/4/14
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
 Pragma directive
 ***********************************************************************************************************************/
 #pragma interrupt INTTM00 r_tau0_channel0_interrupt
+#pragma interrupt INTTRJ0 r_tmr_rj0_interrupt
 /* Start user code for pragma. Do not edit comment generated here */
 /* End user code. Do not edit comment generated here */
 
@@ -63,6 +64,19 @@ __interrupt static void r_tau0_channel0_interrupt(void)
 	if(g_sysTick & 0x01)
 		g_elapse2Ms = true;
 		
+    /* End user code. Do not edit comment generated here */
+}
+
+/***********************************************************************************************************************
+* Function Name: r_tmr_rj0_interrupt
+* Description  : This function is INTTRJ0 interrupt service routine.
+* Arguments    : None
+* Return Value : None
+***********************************************************************************************************************/
+__interrupt static void r_tmr_rj0_interrupt(void)
+{
+    /* Start user code. Do not edit comment generated here */
+	g_elapse20MsCnt ++;
     /* End user code. Do not edit comment generated here */
 }
 

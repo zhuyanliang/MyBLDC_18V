@@ -23,8 +23,6 @@ void Task_Btn_Scan(void)
 	{
 		cnt = 0;
 		g_btnPress = false;
-		g_speed = 0U;
-		Led_Set(0,0,0);
 	}
 }
 

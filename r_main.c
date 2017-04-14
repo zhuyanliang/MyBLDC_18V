@@ -23,7 +23,7 @@
 * Device(s)    : R5F104BA
 * Tool-Chain   : CA78K0R
 * Description  : This file implements main function.
-* Creation Date: 2017/4/7
+* Creation Date: 2017/4/14
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -64,23 +64,25 @@ void main(void)
 {
     R_MAIN_UserInit();
     /* Start user code. Do not edit comment generated here */
-	
+    
     for(;;)
     {
 		// loop execution always
 		Task_Current_Check();
 		Task_Motor_Control(); 
-
+		
 		//execution cycle is 2Ms
 		if(g_elapse2Ms)
 		{
 			static uint8_t tskList = 0;
 			g_elapse2Ms = false;
-	
-			R_WDT_Restart();
-			Task_Manage_ProtectInfo();
+
+			Task_Calc_Speed();
 			Task_Motor_SpeedControl();
+			Task_Manage_ProtectInfo();
 			
+			R_WDT_Restart();
+
 			switch(tskList++)
 			{
 			case 0:
@@ -91,7 +93,6 @@ void main(void)
 				break;
 			case 2:
 				Task_Btn_Scan();
-				Task_Calc_Speed();
 				break;
 			case 3:
 				Task_Temperature_Check();
@@ -118,9 +119,9 @@ void R_MAIN_UserInit(void)
 	hdwinit();
 
 	R_TAU0_Channel0_Start();	/* system tick */
-
+	R_TMR_RJ0_Start();			/* speed check timer start*/
 	Global_Var_Init();
-	
+	PID_Init();
     EI();
     /* End user code. Do not edit comment generated here */
 }

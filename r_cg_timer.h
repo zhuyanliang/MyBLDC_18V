@@ -23,7 +23,7 @@
 * Device(s)    : R5F104BA
 * Tool-Chain   : CA78K0R
 * Description  : This file implements device driver for TAU module.
-* Creation Date: 2017/4/7
+* Creation Date: 2017/4/14
 ***********************************************************************************************************************/
 
 #ifndef TAU_H
@@ -881,6 +881,8 @@ Macro definitions
 #define _5DBF_TAU_TDR00_VALUE                   (0x5DBFU)
 /* Clock divisor for TAU0 channel 0 */
 #define _0001_TAU0_CHANNEL0_DIVISOR             (0x0001U)
+/* Timer RJ register (TRJ0) value */
+#define _EA5F_TMRJ_TRJ0_VALUE                   (0xEA5FU)
 /* TMRD register A1 (TRDGRA1) */
 #define _12BF_TMRD_TRDGRA1_VALUE                (0x12BFU)
 /* TMRD register B1 (TRDGRB1) */
@@ -908,6 +910,9 @@ Global functions
 void R_TAU0_Create(void);
 void R_TAU0_Channel0_Start(void);
 void R_TAU0_Channel0_Stop(void);
+void R_TMR_RJ0_Create(void);
+void R_TMR_RJ0_Start(void);
+void R_TMR_RJ0_Stop(void);
 void R_TMR_RD1_Create(void);
 void R_TMR_RD1_Start(void);
 void R_TMR_RD1_Stop(void);

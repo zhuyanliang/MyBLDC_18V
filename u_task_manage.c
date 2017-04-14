@@ -78,15 +78,22 @@ void Task_Motor_SpeedControl(void)
 	if(!g_btnPress)
 	{
 		g_speedPWM = SPEED_MIN;
+		if(Check_Motor_Stop())
+		{
+			g_realSpeed = 0;
+			g_dltSpeedTick = (~(uint32_t)0x00);
+		}
 		return;
 	}
-	if(g_speedPWM < SPEED_Expected)
-	{
-		g_speedPWM += SPEED_Up_Rate;
-	}
+	g_speedPWM += PID_Control();
+
 	if(g_speedPWM >= SPEED_MAX)
 	{
 		g_speedPWM = SPEED_MAX - 1;
+	}
+	if(g_speedPWM <= SPEED_MIN)
+	{
+		g_speedPWM = SPEED_MIN;
 	}
 	
 	PWM_Set_Duty(g_speedPWM);
@@ -106,8 +113,14 @@ void Task_Delay(void)
 void Task_Manage_ProtectInfo(void)
 {
 	uint8_t protectInfo =  *(uint8_t*)&g_sysProtect;
-	if((0 == protectInfo) && g_btnPress)
+	
+	/* LED always on  */
+	if(0 == protectInfo)
 	{
+		if(g_btnPress)
+			Led_Set(0xFF,0xFF,0xFFFF);
+		else
+			Led_Set(0x00,0x00,0x00);
 		return;
 	}
 	else
@@ -116,7 +129,7 @@ void Task_Manage_ProtectInfo(void)
 		{
 			Led_Set(30,7,200);
 		}
-		if(g_sysProtect.ovCur)
+		if(g_sysProtect.ovCur || g_sysProtect.curshort)
 		{
 			Led_Set(30,6,200);
 		}
@@ -138,21 +151,22 @@ void Task_Manage_ProtectInfo(void)
  */
 void Task_Calc_Speed(void)
 {
+	static uint16_t speedSum = 0;
 	static uint8_t cnt = 0;
 
+	cnt++;
 	if(MOTOR_STOP == g_motorState)
+	{
 		return;
-	
-	if(cnt++ > 20)
+	}
+	if(cnt >= SPEEDAVGNUM)
 	{
 		cnt = 0;
-		g_speed = 60000U/g_dltSpeedTick*10;
+		g_realSpeed = speedSum/SPEEDAVGNUM;
+		speedSum = 0;
 	}
-
-	if(g_speed > 5000U)
-	{
-		Led_Set(25,3,100);
-	}
+	speedSum += (uint16_t)(60000000/g_dltSpeedTick/MAGNEDTIC_POLE_NUM);
+	
 }
 
 

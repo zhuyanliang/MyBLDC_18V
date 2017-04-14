@@ -48,8 +48,10 @@ typedef struct
 	uint16_t const_On_Time; 	/* led on duration time  uint:10Ms*/
 }S_LED_SET;
 
+
 extern uint32_t 		g_sysTick;
 extern bool 			g_elapse2Ms;
+extern uint8_t			g_elapse20MsCnt;
 
 extern S_SYS_PROTECT	g_sysProtect;
 extern S_LED_SET		g_ledSet;
@@ -58,7 +60,6 @@ extern uint8_t			g_hallState;
 extern bool 			g_btnPress;
 extern uint16_t 		g_motorCurrent;
 extern bool 			g_motorDirection;
-extern uint16_t			g_speedPWM;
 extern bool 			g_motorStopFlag;
 
 extern uint16_t 		g_voltLow;
@@ -66,10 +67,12 @@ extern uint16_t			g_curShort;
 extern uint16_t			g_curOvLoad;
 extern uint16_t			g_ovTemp;
 
-extern uint16_t				g_speed;
-extern volatile uint16_t	g_dltSpeedTick;
+extern volatile int16_t		g_speedPWM;
+extern volatile uint16_t	g_realSpeed;
+extern uint16_t				g_setSpeed;
 
-extern uint32_t			g_justForTest;
+extern volatile uint32_t	g_dltSpeedTick;
+extern uint32_t				g_justForTest;
 
 void Global_Var_Init(void);
 
