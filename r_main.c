@@ -23,7 +23,7 @@
 * Device(s)    : R5F104BA
 * Tool-Chain   : CA78K0R
 * Description  : This file implements main function.
-* Creation Date: 2017/4/14
+* Creation Date: 2017/5/22
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -39,6 +39,7 @@ Includes
 #include "r_cg_cgc.h"
 #include "r_cg_port.h"
 #include "r_cg_intc.h"
+#include "r_cg_serial.h"
 #include "r_cg_adc.h"
 #include "r_cg_timer.h"
 #include "r_cg_wdt.h"
@@ -51,6 +52,7 @@ Includes
 Global variables and functions
 ***********************************************************************************************************************/
 /* Start user code for global. Do not edit comment generated here */
+
 /* End user code. Do not edit comment generated here */
 void R_MAIN_UserInit(void);
 
@@ -120,6 +122,7 @@ void R_MAIN_UserInit(void)
 
 	R_TAU0_Channel0_Start();	/* system tick */
 	R_TMR_RJ0_Start();			/* speed check timer start*/
+	R_UART1_Start();
 	Global_Var_Init();
 	PID_Init();
     EI();

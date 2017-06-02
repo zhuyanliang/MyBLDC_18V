@@ -12,5 +12,8 @@
 
 void Delay_Ms(uint32_t val);
 void Delay_1Us(void);
+uint16_t Calc_AverageCalculate(uint16_t *TableEntry,uint8_t len);
+uint32_t Calc_AverageCalculate_32Bit(uint32_t *TableEntry,uint8_t len);
+
 
 #endif

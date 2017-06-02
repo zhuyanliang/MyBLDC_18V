@@ -18,17 +18,19 @@
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : r_cg_intc.c
+* File Name    : r_cg_serial_user.c
 * Version      : CodeGenerator for RL78/G14 V2.04.05.01 [11 Nov 2016]
 * Device(s)    : R5F104BA
 * Tool-Chain   : CA78K0R
-* Description  : This file implements device driver for INTC module.
+* Description  : This file implements device driver for Serial module.
 * Creation Date: 2017/5/22
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
 Pragma directive
 ***********************************************************************************************************************/
+#pragma interrupt INTST1 r_uart1_interrupt_send
+#pragma interrupt INTSR1 r_uart1_interrupt_receive
 /* Start user code for pragma. Do not edit comment generated here */
 /* End user code. Do not edit comment generated here */
 
@@ -36,7 +38,7 @@ Pragma directive
 Includes
 ***********************************************************************************************************************/
 #include "r_cg_macrodriver.h"
-#include "r_cg_intc.h"
+#include "r_cg_serial.h"
 /* Start user code for include. Do not edit comment generated here */
 /* End user code. Do not edit comment generated here */
 #include "r_cg_userdefine.h"
@@ -44,118 +46,120 @@ Includes
 /***********************************************************************************************************************
 Global variables and functions
 ***********************************************************************************************************************/
+extern volatile uint8_t * gp_uart1_tx_address;         /* uart1 send buffer address */
+extern volatile uint16_t  g_uart1_tx_count;            /* uart1 send data number */
+extern volatile uint8_t * gp_uart1_rx_address;         /* uart1 receive buffer address */
+extern volatile uint16_t  g_uart1_rx_count;            /* uart1 receive data number */
+extern volatile uint16_t  g_uart1_rx_length;           /* uart1 receive data length */
 /* Start user code for global. Do not edit comment generated here */
 /* End user code. Do not edit comment generated here */
 
 /***********************************************************************************************************************
-* Function Name: R_INTC_Create
-* Description  : This function initializes INTP module.
+* Function Name: r_uart1_interrupt_receive
+* Description  : This function is INTSR1 interrupt service routine.
 * Arguments    : None
 * Return Value : None
 ***********************************************************************************************************************/
-void R_INTC_Create(void)
+__interrupt static void r_uart1_interrupt_receive(void)
 {
-    PMK0 = 1U;    /* disable INTP0 operation */
-    PIF0 = 0U;    /* clear INTP0 interrupt flag */
-    PMK1 = 1U;    /* disable INTP1 operation */
-    PIF1 = 0U;    /* clear INTP1 interrupt flag */
-    PMK2 = 1U;    /* disable INTP2 operation */
-    PIF2 = 0U;    /* clear INTP2 interrupt flag */
-    PMK3 = 1U;    /* disable INTP3 operation */
-    PIF3 = 0U;    /* clear INTP3 interrupt flag */
-    PMK4 = 1U;    /* disable INTP4 operation */
-    PIF4 = 0U;    /* clear INTP4 interrupt flag */
-    PMK5 = 1U;    /* disable INTP5 operation */
-    PIF5 = 0U;    /* clear INTP5 interrupt flag */
-    /* Set INTP1 high priority */
-    PPR11 = 0U;
-    PPR01 = 0U;
-    /* Set INTP2 high priority */
-    PPR12 = 0U;
-    PPR02 = 0U;
-    /* Set INTP3 high priority */
-    PPR13 = 0U;
-    PPR03 = 0U;
-    EGN0 = _02_INTP1_EDGE_FALLING_SEL | _04_INTP2_EDGE_FALLING_SEL | _08_INTP3_EDGE_FALLING_SEL;
-    EGP0 = _02_INTP1_EDGE_RISING_SEL | _04_INTP2_EDGE_RISING_SEL | _08_INTP3_EDGE_RISING_SEL;
-    /* Set INTP1 pin */
-    PM5 |= 0x01U;
-    /* Set INTP2 pin */
-    PM5 |= 0x02U;
-    /* Set INTP3 pin */
-    PM3 |= 0x01U;
+    volatile uint8_t rx_data;
+    volatile uint8_t err_type;
+    
+    err_type = (uint8_t)(SSR03 & 0x0007U);
+    SIR03 = (uint16_t)err_type;
+
+    if (err_type != 0U)
+    {
+        r_uart1_callback_error(err_type);
+    }
+    
+    rx_data = RXD1;
+
+    if (g_uart1_rx_length > g_uart1_rx_count)
+    {
+        *gp_uart1_rx_address = rx_data;
+        gp_uart1_rx_address++;
+        g_uart1_rx_count++;
+
+        if (g_uart1_rx_length == g_uart1_rx_count)
+        {
+            r_uart1_callback_receiveend();
+        }
+    }
+    else
+    {
+        r_uart1_callback_softwareoverrun(rx_data);
+    }
 }
 
 /***********************************************************************************************************************
-* Function Name: R_INTC1_Start
-* Description  : This function clears INTP1 interrupt flag and enables interrupt.
+* Function Name: r_uart1_interrupt_send
+* Description  : This function is INTST1 interrupt service routine.
 * Arguments    : None
 * Return Value : None
 ***********************************************************************************************************************/
-void R_INTC1_Start(void)
+__interrupt static void r_uart1_interrupt_send(void)
 {
-    PIF1 = 0U;    /* clear INTP1 interrupt flag */
-    PMK1 = 0U;    /* enable INTP1 interrupt */
+    if (g_uart1_tx_count > 0U)
+    {
+        TXD1 = *gp_uart1_tx_address;
+        gp_uart1_tx_address++;
+        g_uart1_tx_count--;
+    }
+    else
+    {
+        r_uart1_callback_sendend();
+    }
 }
 
 /***********************************************************************************************************************
-* Function Name: R_INTC1_Stop
-* Description  : This function disables INTP1 interrupt and clears interrupt flag.
+* Function Name: r_uart1_callback_receiveend
+* Description  : This function is a callback function when UART1 finishes reception.
 * Arguments    : None
 * Return Value : None
 ***********************************************************************************************************************/
-void R_INTC1_Stop(void)
+static void r_uart1_callback_receiveend(void)
 {
-    PMK1 = 1U;    /* disable INTP1 interrupt */
-    PIF1 = 0U;    /* clear INTP1 interrupt flag */
+    /* Start user code. Do not edit comment generated here */
+    /* End user code. Do not edit comment generated here */
 }
 
 /***********************************************************************************************************************
-* Function Name: R_INTC2_Start
-* Description  : This function clears INTP2 interrupt flag and enables interrupt.
-* Arguments    : None
+* Function Name: r_uart1_callback_softwareoverrun
+* Description  : This function is a callback function when UART1 receives an overflow data.
+* Arguments    : rx_data -
+*                    receive data
 * Return Value : None
 ***********************************************************************************************************************/
-void R_INTC2_Start(void)
+static void r_uart1_callback_softwareoverrun(uint16_t rx_data)
 {
-    PIF2 = 0U;    /* clear INTP2 interrupt flag */
-    PMK2 = 0U;    /* enable INTP2 interrupt */
+    /* Start user code. Do not edit comment generated here */
+    /* End user code. Do not edit comment generated here */
 }
 
 /***********************************************************************************************************************
-* Function Name: R_INTC2_Stop
-* Description  : This function disables INTP2 interrupt and clears interrupt flag.
+* Function Name: r_uart1_callback_sendend
+* Description  : This function is a callback function when UART1 finishes transmission.
 * Arguments    : None
 * Return Value : None
 ***********************************************************************************************************************/
-void R_INTC2_Stop(void)
+static void r_uart1_callback_sendend(void)
 {
-    PMK2 = 1U;    /* disable INTP2 interrupt */
-    PIF2 = 0U;    /* clear INTP2 interrupt flag */
+    /* Start user code. Do not edit comment generated here */
+    /* End user code. Do not edit comment generated here */
 }
 
 /***********************************************************************************************************************
-* Function Name: R_INTC3_Start
-* Description  : This function clears INTP3 interrupt flag and enables interrupt.
-* Arguments    : None
+* Function Name: r_uart1_callback_error
+* Description  : This function is a callback function when UART1 reception error occurs.
+* Arguments    : err_type -
+*                    error type value
 * Return Value : None
 ***********************************************************************************************************************/
-void R_INTC3_Start(void)
+static void r_uart1_callback_error(uint8_t err_type)
 {
-    PIF3 = 0U;    /* clear INTP3 interrupt flag */
-    PMK3 = 0U;    /* enable INTP3 interrupt */
-}
-
-/***********************************************************************************************************************
-* Function Name: R_INTC3_Stop
-* Description  : This function disables INTP3 interrupt and clears interrupt flag.
-* Arguments    : None
-* Return Value : None
-***********************************************************************************************************************/
-void R_INTC3_Stop(void)
-{
-    PMK3 = 1U;    /* disable INTP3 interrupt */
-    PIF3 = 0U;    /* clear INTP3 interrupt flag */
+    /* Start user code. Do not edit comment generated here */
+    /* End user code. Do not edit comment generated here */
 }
 
 /* Start user code for adding. Do not edit comment generated here */

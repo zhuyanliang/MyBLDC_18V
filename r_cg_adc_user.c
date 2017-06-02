@@ -23,7 +23,7 @@
 * Device(s)    : R5F104BA
 * Tool-Chain   : CA78K0R
 * Description  : This file implements device driver for ADC module.
-* Creation Date: 2017/4/14
+* Creation Date: 2017/5/22
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -85,12 +85,12 @@ float ADC_Convert_Volt(uint8_t channel)
 
 /*
  * return num value average
- * Tips:num < 64
+ * Tips:
  */
 uint16_t ADC_Average_Original(uint8_t num,uint8_t channel)
 {
 	uint8_t i;
-	uint16_t sum = 0;
+	uint32_t sum = 0;
 	for(i=0;i<num;i++)
 	{
 		sum += ADC_Convert_Original(channel);

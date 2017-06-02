@@ -23,7 +23,7 @@
 * Device(s)    : R5F104BA
 * Tool-Chain   : CA78K0R
 * Description  : This file implements device driver for INTC module.
-* Creation Date: 2017/4/14
+* Creation Date: 2017/5/22
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -59,29 +59,35 @@ Global variables and functions
 ***********************************************************************************************************************/
 __interrupt static void r_intc1_interrupt(void)
 {
-
     /* Start user code. Do not edit comment generated here */
     /* for calculate motor speed r/min */
     /* timer intval is 1/3 uS */
+ 	
+ 	static uint8_t  index = 0x00;
 #define _20Ms (_EA5F_TMRJ_TRJ0_VALUE+1)
 	static uint16_t lastTick = 0;
 	uint16_t current = 0;	
-
+	
 	current = TRJ0;
 	if(current > lastTick)
 	{
 		g_dltSpeedTick = _20Ms + lastTick - current; 
 		g_dltSpeedTick /= 3U;
 		if(g_elapse20MsCnt > 1U)
+		{
 			g_dltSpeedTick += ((g_elapse20MsCnt-1)*20000U);
+		}
 	}
 	else
 	{
 		g_dltSpeedTick = lastTick - current; 
 		g_dltSpeedTick /= 3U;
 		if(0 != g_elapse20MsCnt)
+		{
 			g_dltSpeedTick += g_elapse20MsCnt*20000U;
+		}
 	}
+	
 	g_elapse20MsCnt = 0;
 	lastTick = TRJ0;
 	

@@ -23,7 +23,7 @@
 * Device(s)    : R5F104BA
 * Tool-Chain   : CA78K0R
 * Description  : This file implements device driver for TAU module.
-* Creation Date: 2017/4/14
+* Creation Date: 2017/5/22
 ***********************************************************************************************************************/
 
 #ifndef TAU_H
@@ -886,11 +886,11 @@ Macro definitions
 /* TMRD register A1 (TRDGRA1) */
 #define _12BF_TMRD_TRDGRA1_VALUE                (0x12BFU)
 /* TMRD register B1 (TRDGRB1) */
-#define _095F_TMRD_TRDGRB1_VALUE                (0x095FU)
+#define _12C0_TMRD_TRDGRB1_VALUE                (0x12C0U)
 /* TMRD register C1 (TRDGRC1) */
-#define _095F_TMRD_TRDGRC1_VALUE                (0x095FU)
+#define _12C0_TMRD_TRDGRC1_VALUE                (0x12C0U)
 /* TMRD register D1 (TRDGRD1) */
-#define _095F_TMRD_TRDGRD1_VALUE                (0x095FU)
+#define _12C0_TMRD_TRDGRD1_VALUE                (0x12C0U)
 
 /***********************************************************************************************************************
 Typedef definitions

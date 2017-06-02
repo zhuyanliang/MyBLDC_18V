@@ -3,8 +3,8 @@
 #define CONFIG_H
 
 #define SPEED_MAX		(int16_t)4799
-#define SPEED_MIN		(int16_t)0
-#define SPEED_EXPECT	3000U
+#define SPEED_MIN		(int16_t)400
+#define SPEED_EXPECT	6000U
 
 #define MAGNEDTIC_POLE_NUM 		4U
 #define SPEEDAVGNUM				4U

@@ -9,9 +9,9 @@ void PID_Init(void)
     s_pid.errPre = 0;
     s_pid.errLast = 0;
     s_pid.integral = 0;
-	s_pid.Kp = 0.02;
+	s_pid.Kp = 0.05;
     s_pid.Ki = 0.02;
-    s_pid.Kd = 0.0;
+    s_pid.Kd = 0.001;
 }
 
 int16_t PID_Control(void)
@@ -25,11 +25,13 @@ int16_t PID_Control(void)
 	iError = s_pid.setSpeed - s_pid.realSpeed;
 	if(iError > 200)
 	{
-		s_pid.Ki = 0.01;
+		s_pid.Kp = 0.05;
+		s_pid.Ki = 0.035;
 	}
 	else
 	{
-		s_pid.Ki = 0.008;
+		s_pid.Kp = 0.01;
+		s_pid.Ki = 0.02;
 	}
 
 	inncPid = (float)(s_pid.Kp*(iError - s_pid.errLast));

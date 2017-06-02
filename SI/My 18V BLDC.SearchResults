@@ -1,4 +1,7 @@
----- Task_Calc_Speed Matches (3 in 3 files) ----
-R_main.c:		Task_Calc_Speed();
-U_task_manage.c:void Task_Calc_Speed(void)
-U_task_manage.h:void Task_Calc_Speed(void);
+---- g_setSpeed Matches (6 in 4 files) ----
+U_gvar.c:uint16_t				g_setSpeed;
+U_gvar.c:	g_setSpeed = SPEED_EXPECT;
+U_gvar.h:extern uint16_t				g_setSpeed;
+U_motor_driver.c:			if(g_speedPWM < (g_setSpeed - 200U))
+u_PID.c:	s_pid.setSpeed= g_setSpeed;
+u_PID.c:	s_pid.setSpeed = g_setSpeed;

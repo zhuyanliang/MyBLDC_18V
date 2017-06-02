@@ -8,9 +8,29 @@
  */
 void Task_Voltage_Check(void)
 {
-	static uint8_t cnt = 0;
+	uint8_t i;
+	static bool 	firstFlag = true;
+	static uint16_t voltArray[4] = {0};
+	static uint8_t  voltIndex = 0;
+	static uint8_t 	cnt = 0;
+	uint16_t volatge;
 
-	if(ADC_Average_Original(3U,Adc_Channel_Voltage) < g_voltLow)
+	if(firstFlag)
+	{
+		firstFlag = false;
+		for(i=0;i<4U;i++)
+		{
+			voltArray[voltIndex++ & 0x03] = ADC_Convert_Original(Adc_Channel_Voltage);
+		}
+		volatge = Calc_AverageCalculate(voltArray,4);
+	}
+	else
+	{
+		voltArray[voltIndex++ & 0x03] = ADC_Convert_Original(Adc_Channel_Voltage);
+		volatge = Calc_AverageCalculate(voltArray,4);
+	}
+
+	if(volatge < g_voltLow)
 	{
 		if(cnt++ > 3)
 			g_sysProtect.lowVolt = 0b1;
@@ -22,22 +42,37 @@ void Task_Voltage_Check(void)
 	}
 }
 
+
+/*
+ * execution cycle is 10Ms
+ *
+ * Check Pahse Current
+ *
+ */
 void Task_Current_Check(void)
 {
 	uint8_t i;
-	uint16_t sum = 0;
-
-	for(i=0;i<4U;i++)
+	static bool firstFlag = true;
+	static uint16_t currentArray[4] = {0};
+	static uint8_t  currentIndex = 0;
+	if(firstFlag)
 	{
-		g_motorCurrent = ADC_Convert_Original(Adc_Channel_Current);
-		if(g_motorCurrent > g_curShort)
+		firstFlag = false;
+		for(i=0;i<4U;i++)
 		{
-			g_sysProtect.curshort = 0b1;
+			currentArray[currentIndex++ & 0x03] = ADC_Convert_Original(Adc_Channel_Current);
+			if(g_motorCurrent > g_curShort)
+			{
+				g_sysProtect.curshort = 0b1;
+			}
 		}
-		
-		sum += g_motorCurrent;
+		g_motorCurrent = Calc_AverageCalculate(currentArray,4);
 	}
-	g_motorCurrent = sum/4U;
+	else
+	{
+		currentArray[currentIndex++ & 0x03] = ADC_Convert_Original(Adc_Channel_Current);
+		g_motorCurrent = Calc_AverageCalculate(currentArray,4);
+	}
 	
 	if(g_motorCurrent > g_curOvLoad)
 	{
@@ -51,9 +86,29 @@ void Task_Current_Check(void)
 
 void Task_Temperature_Check(void)
 {
+	uint8_t i;
+	static bool firstFlag = true;
+	static uint16_t tempArray[4] = {0};
+	static uint8_t  tempIndex = 0;
 	static uint8_t cnt = 0;
+	uint16_t temperature;
+
+	if(firstFlag)
+	{
+		firstFlag = false;
+		for(i=0;i<4U;i++)
+		{
+			tempArray[tempIndex++ & 0x03] = ADC_Convert_Original(Adc_Channel_MOSTemp);
+		}
+		temperature = Calc_AverageCalculate(tempArray,4);
+	}
+	else
+	{
+		tempArray[tempIndex++ & 0x03] = ADC_Convert_Original(Adc_Channel_MOSTemp);
+		temperature = Calc_AverageCalculate(tempArray,4);
+	}
 	
-	if(ADC_Average_Original(3U,Adc_Channel_MOSTemp) < g_ovTemp)
+	if(temperature < g_ovTemp)
 	{
 		if(cnt++>3)
 			g_sysProtect.mos_ovTemp = 0b1;
@@ -67,8 +122,6 @@ void Task_Temperature_Check(void)
 
 void Task_Motor_Control(void)
 {
-	/* 1. manage motor speed*/
-	/* 2. control the motor commutate*/
 	Manage_Motor_State();
 	Manage_Motor_Phase();
 }
@@ -103,8 +156,6 @@ void Task_Motor_SpeedControl(void)
  * execution cycle is 10Ms
  *
  */
-
-
 void Task_Delay(void)
 {
 	 

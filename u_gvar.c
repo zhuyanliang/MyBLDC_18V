@@ -9,7 +9,7 @@
 /* system tick*/
 uint32_t 		g_sysTick;	
 
-/* systrm 2ms flag*/
+/* system 2ms flag*/
 bool 	 		g_elapse2Ms;
 
 /* protect case*/

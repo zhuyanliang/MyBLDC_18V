@@ -23,7 +23,7 @@
 * Device(s)    : R5F104BA
 * Tool-Chain   : CA78K0R
 * Description  : This file implements device driver for TAU module.
-* Creation Date: 2017/4/14
+* Creation Date: 2017/5/22
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -76,7 +76,6 @@ __interrupt static void r_tau0_channel0_interrupt(void)
 __interrupt static void r_tmr_rj0_interrupt(void)
 {
     /* Start user code. Do not edit comment generated here */
-	g_elapse20MsCnt ++;
     /* End user code. Do not edit comment generated here */
 }
 
